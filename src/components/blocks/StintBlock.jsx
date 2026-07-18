@@ -9,7 +9,9 @@ function cn(...inputs) {
 }
 
 export const StintBlock = () => {
-  const stintDurationValue = useRaceStore((state) => state.stintDurationValue);
+  const stintDurations = useRaceStore((state) => state.stintDurations);
+  const currentStintIndex = useRaceStore((state) => state.currentStintIndex);
+  const totalStints = useRaceStore((state) => state.totalStints);
   const stintType = useRaceStore((state) => state.stintType);
   const stintStartTime = useRaceStore((state) => state.stintStartTime);
   const stintStartLaps = useRaceStore((state) => state.stintStartLaps);
@@ -18,20 +20,23 @@ export const StintBlock = () => {
 
   const [timeLeft, setTimeLeft] = useState(0);
 
+  // Active stint duration based on index
+  const activeDuration = stintDurations[currentStintIndex] || 20;
+
   useEffect(() => {
     if (!stintStartTime || stintType !== 'minutes') return;
 
     const interval = setInterval(() => {
       const now = Date.now();
       const elapsedMs = now - stintStartTime;
-      const totalDurationMs = stintDurationValue * 60 * 1000;
+      const totalDurationMs = activeDuration * 60 * 1000;
       const remainingMs = totalDurationMs - elapsedMs;
       
       setTimeLeft(Math.max(0, remainingMs));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [stintStartTime, stintDurationValue, stintType]);
+  }, [stintStartTime, activeDuration, stintType]);
 
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -54,7 +59,7 @@ export const StintBlock = () => {
   } else {
     // Laps logic
     const lapsDone = currentDriverLaps - stintStartLaps;
-    const lapsLeft = Math.max(0, stintDurationValue - lapsDone);
+    const lapsLeft = Math.max(0, activeDuration - lapsDone);
     displayValue = lapsLeft.toString();
     
     if (lapsLeft <= 3) {
@@ -70,11 +75,12 @@ export const StintBlock = () => {
       <button 
         onClick={resetStint}
         className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-4 rounded-full bg-dark-gray text-white opacity-50 active:opacity-100"
+        title="Siguiente stint"
       >
         <RefreshCw className="w-4 h-4 sm:w-8 sm:h-8" />
       </button>
-      <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[10px] sm:text-base mb-1 sm:mb-2">
-        Ventana de Pit
+      <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[10px] sm:text-base mb-1 sm:mb-2 text-center">
+        Pit Window {totalStints > 1 ? `(Stint ${currentStintIndex + 1}/${totalStints})` : ''}
       </div>
       <div className={cn("text-4xl landscape:text-3xl sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
         {displayValue}

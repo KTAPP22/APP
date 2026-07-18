@@ -5,7 +5,9 @@ export const useRaceStore = create((set, get) => ({
   isSetupComplete: false,
   targetDriverId: null, // Driver to track
   targetDriverName: '',
-  stintDurationValue: 20,
+  stintDurations: [20], // Array of stint durations (minutes or laps)
+  currentStintIndex: 0,
+  totalStints: 1,
   stintType: 'minutes', // 'minutes' or 'laps'
   apexUrl: '', // Apex Timing live URL
   apexPort: 9950, // Apex Timing port
@@ -29,9 +31,11 @@ export const useRaceStore = create((set, get) => ({
   stintStartLaps: 0,
   
   // Actions
-  completeSetup: (driverName, stintValue, type, circuitUrl, port) => set({ 
+  completeSetup: (driverName, stintDurationsArray, type, circuitUrl, port) => set({ 
     targetDriverName: driverName, 
-    stintDurationValue: parseInt(stintValue, 10),
+    stintDurations: stintDurationsArray,
+    totalStints: stintDurationsArray.length,
+    currentStintIndex: 0,
     stintType: type,
     apexUrl: circuitUrl || '',
     apexPort: parseInt(port, 10) || 9950,
@@ -76,8 +80,14 @@ export const useRaceStore = create((set, get) => ({
     }
   },
 
-  resetStint: () => set({ 
-    stintStartTime: Date.now(),
-    stintStartLaps: get().currentDriverLaps || 0
-  })
+  resetStint: () => {
+    const { currentStintIndex, totalStints } = get();
+    // Advance to the next stint (wrap around to 0 when finished)
+    const nextIndex = (currentStintIndex + 1) % totalStints;
+    set({ 
+      currentStintIndex: nextIndex,
+      stintStartTime: Date.now(),
+      stintStartLaps: get().currentDriverLaps || 0
+    });
+  }
 }));
