@@ -51,95 +51,97 @@ export const TimingScreen = ({ onBack }) => {
       </div>
 
       {/* MAIN LAYOUT: Split into timing table and track graphic */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* LEFT COLUMN: Timing Table (70% width) */}
-        <div className="w-[70%] h-full overflow-y-auto border-r border-dark-gray">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-[#151515] text-[#999] uppercase text-xxs sm:text-xs tracking-wider border-b border-dark-gray font-sans">
-                <th className="p-2 sm:p-3 text-center w-12">Clasif.</th>
-                <th className="p-2 sm:p-3 text-center w-12">Kart</th>
-                <th className="p-2 sm:p-3">Piloto</th>
-                <th className="p-2 sm:p-3 text-right">Última vuelta</th>
-                <th className="p-2 sm:p-3 text-right">Mejor vuelta</th>
-                <th className="p-2 sm:p-3 text-right">Gap</th>
-                <th className="p-2 sm:p-3 text-center w-16">Vueltas</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#151515] font-mono text-sm">
-              {sortedDrivers.map((driver) => {
-                const isTarget = driver.name.toLowerCase().includes(targetDriverName.toLowerCase()) || 
-                                 targetDriverName.toLowerCase().includes(driver.name.toLowerCase());
-                
-                return (
-                  <tr 
-                    key={driver.id} 
-                    className={`${isTarget ? 'bg-neon-red/10 text-white' : 'hover:bg-[#090909] text-gray-300'}`}
-                  >
-                    {/* Position */}
-                    <td className="p-2 sm:p-3 text-center font-bold">
-                      {isTarget ? (
-                        <span className="bg-neon-red text-white px-2 py-0.5 rounded text-xs">
-                          {driver.position}
+      <div className="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
+        {/* LEFT COLUMN: Timing Table (70% width on desktop, full width on mobile) */}
+        <div className="w-full md:w-[70%] border-b md:border-b-0 md:border-r border-dark-gray flex-shrink-0">
+          <div className="w-full overflow-x-auto">
+            <table className="w-full text-left border-collapse min-w-[600px] sm:min-w-0">
+              <thead>
+                <tr className="bg-[#151515] text-[#999] uppercase text-xxs sm:text-xs tracking-wider border-b border-dark-gray font-sans">
+                  <th className="p-2 sm:p-3 text-center w-12">Clasif.</th>
+                  <th className="p-2 sm:p-3 text-center w-12">Kart</th>
+                  <th className="p-2 sm:p-3">Piloto</th>
+                  <th className="p-2 sm:p-3 text-right">Última vuelta</th>
+                  <th className="p-2 sm:p-3 text-right">Mejor vuelta</th>
+                  <th className="p-2 sm:p-3 text-right">Gap</th>
+                  <th className="p-2 sm:p-3 text-center w-16">Vueltas</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#151515] font-mono text-sm">
+                {sortedDrivers.map((driver) => {
+                  const isTarget = driver.name.toLowerCase().includes(targetDriverName.toLowerCase()) || 
+                                   targetDriverName.toLowerCase().includes(driver.name.toLowerCase());
+                  
+                  return (
+                    <tr 
+                      key={driver.id} 
+                      className={`${isTarget ? 'bg-neon-red/10 text-white' : 'hover:bg-[#090909] text-gray-300'}`}
+                    >
+                      {/* Position */}
+                      <td className="p-2 sm:p-3 text-center font-bold">
+                        {isTarget ? (
+                          <span className="bg-neon-red text-white px-2 py-0.5 rounded text-xs">
+                            {driver.position}
+                          </span>
+                        ) : (
+                          <span className="text-white">{driver.position}</span>
+                        )}
+                      </td>
+                      
+                      {/* Kart Number */}
+                      <td className="p-2 sm:p-3 text-center font-bold">
+                        <span 
+                          className="px-1.5 py-0.5 rounded text-xs"
+                          style={{ 
+                            backgroundColor: isTarget ? '#ff073a' : '#222',
+                            color: isTarget ? '#fff' : '#fff'
+                          }}
+                        >
+                          {driver.kartNumber}
                         </span>
-                      ) : (
-                        <span className="text-white">{driver.position}</span>
-                      )}
-                    </td>
-                    
-                    {/* Kart Number */}
-                    <td className="p-2 sm:p-3 text-center font-bold">
-                      <span 
-                        className="px-1.5 py-0.5 rounded text-xs"
-                        style={{ 
-                          backgroundColor: isTarget ? '#ff073a' : '#222',
-                          color: isTarget ? '#fff' : '#fff'
-                        }}
-                      >
-                        {driver.kartNumber}
-                      </span>
-                    </td>
-                    
-                    {/* Driver Name */}
-                    <td className={`p-2 sm:p-3 font-sans font-bold truncate max-w-[120px] sm:max-w-none ${isTarget ? 'text-neon-red' : 'text-white'}`}>
-                      {driver.name}
-                    </td>
-                    
-                    {/* Last Lap */}
-                    <td className="p-2 sm:p-3 text-right text-neon-yellow font-bold">
-                      {driver.lastLap}
-                    </td>
-                    
-                    {/* Best Lap */}
-                    <td className="p-2 sm:p-3 text-right text-neon-green">
-                      {driver.bestLap}
-                    </td>
-                    
-                    {/* Gap to Leader */}
-                    <td className="p-2 sm:p-3 text-right text-gray-400">
-                      {driver.position === 1 ? 'Líder' : (driver.gapToLeader || '--')}
-                    </td>
-                    
-                    {/* Laps */}
-                    <td className="p-2 sm:p-3 text-center text-white">
-                      {driver.laps}
+                      </td>
+                      
+                      {/* Driver Name */}
+                      <td className={`p-2 sm:p-3 font-sans font-bold truncate max-w-[120px] sm:max-w-none ${isTarget ? 'text-neon-red' : 'text-white'}`}>
+                        {driver.name}
+                      </td>
+                      
+                      {/* Last Lap */}
+                      <td className="p-2 sm:p-3 text-right text-neon-yellow font-bold">
+                        {driver.lastLap}
+                      </td>
+                      
+                      {/* Best Lap */}
+                      <td className="p-2 sm:p-3 text-right text-neon-green">
+                        {driver.bestLap}
+                      </td>
+                      
+                      {/* Gap to Leader */}
+                      <td className="p-2 sm:p-3 text-right text-gray-400">
+                        {driver.position === 1 ? 'Líder' : (driver.gapToLeader || '--')}
+                      </td>
+                      
+                      {/* Laps */}
+                      <td className="p-2 sm:p-3 text-center text-white">
+                        {driver.laps}
+                      </td>
+                    </tr>
+                  );
+                })}
+                {sortedDrivers.length === 0 && (
+                  <tr>
+                    <td colSpan="7" className="p-8 text-center text-gray-500 font-sans">
+                      Esperando datos en vivo de Apex Timing...
                     </td>
                   </tr>
-                );
-              })}
-              {sortedDrivers.length === 0 && (
-                <tr>
-                  <td colSpan="7" className="p-8 text-center text-gray-500 font-sans">
-                    Esperando datos en vivo de Apex Timing...
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* RIGHT COLUMN: Track & Circuit Info (30% width) */}
-        <div className="w-[30%] h-full flex flex-col bg-[#050505]">
+        {/* RIGHT COLUMN: Track & Circuit Info (30% width on desktop, full width on mobile) */}
+        <div className="w-full md:w-[30%] flex flex-col bg-[#050505] flex-shrink-0 min-h-[360px] md:min-h-0">
           {/* Header of track section (red background) */}
           <div className="bg-neon-red text-pure-black font-bold uppercase text-xs sm:text-sm px-3 py-2 tracking-wider text-center font-sans">
             Pista Principal (1428m)
