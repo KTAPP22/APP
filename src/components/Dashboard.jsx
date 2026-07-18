@@ -41,15 +41,24 @@ export const Dashboard = ({ onShowTiming }) => {
         <StintBlock />
       </div>
 
-      {/* Floating TIMING Button */}
-      {isLucasGuerrero && (
+      {/* Floating Action Buttons */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-3 z-10">
+        {isLucasGuerrero && (
+          <button
+            onClick={onShowTiming}
+            className="bg-neon-green hover:bg-green-500 active:scale-95 text-pure-black font-bold tracking-widest text-xs py-3 px-6 rounded-full border border-green-800 shadow-[0_0_15px_rgba(57,255,20,0.5)] transition-all uppercase flex items-center gap-2 whitespace-nowrap"
+          >
+            <span>TIMING</span>
+          </button>
+        )}
         <button
-          onClick={onShowTiming}
-          className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-neon-green hover:bg-green-500 active:scale-95 text-pure-black font-bold tracking-widest text-xs py-3 px-6 rounded-full border border-green-800 shadow-[0_0_15px_rgba(57,255,20,0.5)] transition-all uppercase flex items-center gap-2"
+          onClick={() => useRaceStore.setState({ isSetupComplete: false })}
+          className="bg-dark-gray hover:bg-gray-800 active:scale-95 text-white font-bold tracking-widest text-xs py-3 px-6 rounded-full border border-gray-700 shadow-[0_0_15px_rgba(255,255,255,0.1)] transition-all uppercase flex items-center gap-2 whitespace-nowrap"
+          title="Modificar configuración o circuito"
         >
-          <span>TIMING</span>
+          <span>Ajustes</span>
         </button>
-      )}
+      </div>
     </div>
   );
 };

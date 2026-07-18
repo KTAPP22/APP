@@ -12,18 +12,26 @@ const PRESETS = [
 
 export const SetupScreen = () => {
   const completeSetup = useRaceStore((state) => state.completeSetup);
+  const storeTargetDriverName = useRaceStore((state) => state.targetDriverName);
+  const storeStintDurations = useRaceStore((state) => state.stintDurations);
+  const storeStintType = useRaceStore((state) => state.stintType);
+  const storeApexUrl = useRaceStore((state) => state.apexUrl);
+  const storeApexPort = useRaceStore((state) => state.apexPort);
   
-  const [driverName, setDriverName] = useState('');
+  const [driverName, setDriverName] = useState(storeTargetDriverName || '');
   
   // Stints State
-  const [numStints, setNumStints] = useState(1);
-  const [stintDurations, setStintDurations] = useState([20]);
-  const [stintType, setStintType] = useState('minutes'); // 'minutes' or 'laps'
+  const [numStints, setNumStints] = useState(storeStintDurations?.length || 1);
+  const [stintDurations, setStintDurations] = useState(storeStintDurations || [20]);
+  const [stintType, setStintType] = useState(storeStintType || 'minutes');
   
-  // Circuit selector state
-  const [selectedCircuitIndex, setSelectedCircuitIndex] = useState(0); // Lucas Guerrero by default
-  const [customUrl, setCustomUrl] = useState('');
-  const [customPort, setCustomPort] = useState(9950);
+  // Circuit selector state: Find index of saved URL
+  const presetIndex = PRESETS.findIndex(p => p.url === storeApexUrl);
+  const initialCircuitIndex = presetIndex !== -1 ? presetIndex : (storeApexUrl ? PRESETS.length - 1 : 0);
+
+  const [selectedCircuitIndex, setSelectedCircuitIndex] = useState(initialCircuitIndex);
+  const [customUrl, setCustomUrl] = useState(initialCircuitIndex === PRESETS.length - 1 ? storeApexUrl : '');
+  const [customPort, setCustomPort] = useState(storeApexPort || 9950);
 
   const handleNumStintsChange = (val) => {
     const count = Math.max(1, parseInt(val, 10) || 1);
