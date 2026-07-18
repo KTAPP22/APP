@@ -54,20 +54,20 @@ export const TimingScreen = ({ onBack }) => {
       <div className="flex-1 flex flex-col landscape:flex-row overflow-y-auto landscape:overflow-y-hidden">
         {/* LEFT COLUMN: Timing Table (70% width on landscape, full width on portrait) */}
         <div className="w-full landscape:w-[70%] border-b landscape:border-b-0 landscape:border-r border-dark-gray flex-shrink-0 landscape:h-full landscape:overflow-y-auto">
-          <div className="w-full overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[600px] sm:min-w-0">
+          <div className="w-full">
+            <table className="w-full text-left border-collapse table-fixed landscape:table-auto">
               <thead>
-                <tr className="bg-[#151515] text-[#999] uppercase text-xxs sm:text-xs tracking-wider border-b border-dark-gray font-sans">
-                  <th className="p-2 sm:p-3 text-center w-12">Clasif.</th>
-                  <th className="p-2 sm:p-3 text-center w-12">Kart</th>
-                  <th className="p-2 sm:p-3">Piloto</th>
-                  <th className="p-2 sm:p-3 text-right">Última vuelta</th>
-                  <th className="p-2 sm:p-3 text-right">Mejor vuelta</th>
-                  <th className="p-2 sm:p-3 text-right">Gap</th>
-                  <th className="p-2 sm:p-3 text-center w-16">Vueltas</th>
+                <tr className="bg-[#151515] text-[#999] uppercase text-[10px] sm:text-xs tracking-wider border-b border-dark-gray font-sans">
+                  <th className="py-2 px-1 text-center w-[12%] landscape:w-12">Pos</th>
+                  <th className="py-2 px-1 text-center w-[12%] landscape:w-12">Kart</th>
+                  <th className="py-2 px-1 w-[26%] landscape:w-auto">Piloto</th>
+                  <th className="py-2 px-1 text-right w-[18%] landscape:w-auto">Última</th>
+                  <th className="py-2 px-1 text-right w-[18%] landscape:w-auto">Mejor</th>
+                  <th className="py-2 px-1 text-right w-[14%] landscape:w-auto">Gap</th>
+                  <th className="py-2 px-1 text-center w-[10%] landscape:w-16">V.</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#151515] font-mono text-sm">
+              <tbody className="divide-y divide-[#151515] font-mono text-xs sm:text-sm">
                 {sortedDrivers.map((driver) => {
                   const isTarget = driver.name.toLowerCase().includes(targetDriverName.toLowerCase()) || 
                                    targetDriverName.toLowerCase().includes(driver.name.toLowerCase());
@@ -78,9 +78,9 @@ export const TimingScreen = ({ onBack }) => {
                       className={`${isTarget ? 'bg-neon-red/10 text-white' : 'hover:bg-[#090909] text-gray-300'}`}
                     >
                       {/* Position */}
-                      <td className="p-2 sm:p-3 text-center font-bold">
+                      <td className="py-2 px-1 text-center font-bold">
                         {isTarget ? (
-                          <span className="bg-neon-red text-white px-2 py-0.5 rounded text-xs">
+                          <span className="bg-neon-red text-white px-1.5 py-0.5 rounded text-[10px] sm:text-xs">
                             {driver.position}
                           </span>
                         ) : (
@@ -89,9 +89,9 @@ export const TimingScreen = ({ onBack }) => {
                       </td>
                       
                       {/* Kart Number */}
-                      <td className="p-2 sm:p-3 text-center font-bold">
+                      <td className="py-2 px-1 text-center font-bold">
                         <span 
-                          className="px-1.5 py-0.5 rounded text-xs"
+                          className="px-1 py-0.5 rounded text-[10px] sm:text-xs"
                           style={{ 
                             backgroundColor: isTarget ? '#ff073a' : '#222',
                             color: isTarget ? '#fff' : '#fff'
@@ -102,27 +102,27 @@ export const TimingScreen = ({ onBack }) => {
                       </td>
                       
                       {/* Driver Name */}
-                      <td className={`p-2 sm:p-3 font-sans font-bold truncate max-w-[120px] sm:max-w-none ${isTarget ? 'text-neon-red' : 'text-white'}`}>
+                      <td className={`py-2 px-1 font-sans font-bold truncate max-w-[80px] landscape:max-w-none sm:max-w-none ${isTarget ? 'text-neon-red' : 'text-white'}`}>
                         {driver.name}
                       </td>
                       
                       {/* Last Lap */}
-                      <td className="p-2 sm:p-3 text-right text-neon-yellow font-bold">
+                      <td className="py-2 px-1 text-right text-neon-yellow font-bold truncate">
                         {driver.lastLap}
                       </td>
                       
                       {/* Best Lap */}
-                      <td className="p-2 sm:p-3 text-right text-neon-green">
+                      <td className="py-2 px-1 text-right text-neon-green truncate">
                         {driver.bestLap}
                       </td>
                       
                       {/* Gap to Leader */}
-                      <td className="p-2 sm:p-3 text-right text-gray-400">
-                        {driver.position === 1 ? 'Líder' : (driver.gapToLeader || '--')}
+                      <td className="py-2 px-1 text-right text-gray-400 truncate">
+                        {driver.position === 1 ? 'Líd.' : (driver.gapToLeader || '--')}
                       </td>
                       
                       {/* Laps */}
-                      <td className="p-2 sm:p-3 text-center text-white">
+                      <td className="py-2 px-1 text-center text-white">
                         {driver.laps}
                       </td>
                     </tr>
