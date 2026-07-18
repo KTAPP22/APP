@@ -72,6 +72,9 @@ function initDrivers() {
     totalTime: 0,
     // Each driver has slightly different pace
     pace: BASE_LAP_TIME + (Math.random() * 2.5 - 0.5), // 37.5 - 40.5s range
+    // Pit stop logic variables
+    lapsUntilPit: 4 + Math.floor(Math.random() * 4), // Pit stop every 4-7 laps
+    pitStopTicksRemaining: 0
   }));
 }
 
@@ -109,18 +112,40 @@ function generateLapTime(driver) {
 function simulateRaceTick() {
   // Each tick, some drivers complete a lap
   for (const driver of drivers) {
+    if (driver.pitStopTicksRemaining > 0) {
+      driver.pitStopTicksRemaining--;
+      if (driver.pitStopTicksRemaining === 0) {
+        // Exited pit: Out lap completed (slow out lap)
+        const outLapTime = driver.pace + 8.0 + (Math.random() * 4.0);
+        driver.laps++;
+        driver.totalTime += outLapTime;
+        driver.lastLap = formatLapTime(outLapTime);
+        driver.lapsUntilPit = 5 + Math.floor(Math.random() * 4); // Pit again in 5-8 laps
+        console.log(`🏎️  [Fake Apex] ${driver.name} EXITED pit lane (out-lap: ${driver.lastLap})`);
+      }
+      continue;
+    }
+
     // Simulate whether this driver completes a lap this tick
-    // Average lap ~38s, tick every 2s, so ~5% chance per tick
     const chanceToCrossLine = 2.0 / driver.pace;
     if (Math.random() < chanceToCrossLine) {
-      const lapTime = generateLapTime(driver);
-      driver.laps++;
-      driver.totalTime += lapTime;
-      driver.lastLap = formatLapTime(lapTime);
-      
-      if (lapTime < driver.bestLapSeconds) {
-        driver.bestLapSeconds = lapTime;
-        driver.bestLap = formatLapTime(lapTime);
+      driver.lapsUntilPit--;
+
+      if (driver.lapsUntilPit <= 0) {
+        // Enters pit: sets lastLap to PIT and pauses for 6-10 ticks (12-20s)
+        driver.lastLap = 'PIT';
+        driver.pitStopTicksRemaining = 6 + Math.floor(Math.random() * 5);
+        console.log(`🏎️  [Fake Apex] ${driver.name} ENTERED pit lane (stopping for ${driver.pitStopTicksRemaining * 2}s)`);
+      } else {
+        const lapTime = generateLapTime(driver);
+        driver.laps++;
+        driver.totalTime += lapTime;
+        driver.lastLap = formatLapTime(lapTime);
+        
+        if (lapTime < driver.bestLapSeconds) {
+          driver.bestLapSeconds = lapTime;
+          driver.bestLap = formatLapTime(lapTime);
+        }
       }
     }
   }

@@ -29,6 +29,7 @@ export const useRaceStore = create((set, get) => ({
   // Stint
   stintStartTime: null, // timestamp
   stintStartLaps: 0,
+  wasInPit: false, // Tracks if driver was in pit in previous tick
   
   // Actions
   completeSetup: (driverName, stintDurationsArray, type, circuitUrl, port) => set({ 
@@ -41,7 +42,8 @@ export const useRaceStore = create((set, get) => ({
     apexPort: parseInt(port, 10) || 9950,
     isSetupComplete: true,
     stintStartTime: Date.now(),
-    stintStartLaps: get().currentDriverLaps || 0
+    stintStartLaps: get().currentDriverLaps || 0,
+    wasInPit: false
   }),
   
   updateRaceData: (data) => {
@@ -62,6 +64,22 @@ export const useRaceStore = create((set, get) => ({
       const ahead = data.drivers.find(d => d.position === myPos - 1);
       const behind = data.drivers.find(d => d.position === myPos + 1);
 
+      // Detect if driver is currently in pit (Apex standard is "PIT" or "IN" in lastLap)
+      const lastLapStr = String(me.lastLap || '').trim().toUpperCase();
+      const isInPitNow = lastLapStr === 'PIT' || lastLapStr === 'IN' || lastLapStr === 'BOX' || lastLapStr.includes('PIT');
+      
+      let nextIndex = state.currentStintIndex;
+      let startStintTime = state.stintStartTime;
+      let startStintLaps = state.stintStartLaps;
+
+      // Transition: was in pit, now is not -> Exited box!
+      if (state.wasInPit && !isInPitNow) {
+        nextIndex = (state.currentStintIndex + 1) % state.totalStints;
+        startStintTime = Date.now();
+        startStintLaps = me.laps || state.currentDriverLaps;
+        console.log(`[AutoStint] Pilot exited box. Transitioning to stint ${nextIndex + 1}/${state.totalStints}`);
+      }
+
       set({
         sessionTimeLeft: data.sessionTimeLeft,
         sessionLapsLeft: data.sessionLapsLeft,
@@ -71,6 +89,10 @@ export const useRaceStore = create((set, get) => ({
         leaderGap: leader && me.position !== 1 ? me.gapToLeader : 'LÍDER',
         gapAhead: ahead ? me.gapAhead : '--',
         gapBehind: behind ? me.gapBehind : '--',
+        wasInPit: isInPitNow,
+        currentStintIndex: nextIndex,
+        stintStartTime: startStintTime,
+        stintStartLaps: startStintLaps
       });
     } else {
       set({
