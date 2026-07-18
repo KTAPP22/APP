@@ -9,10 +9,10 @@ function cn(...inputs) {
 
 const GapItem = ({ label, gap, colorClass }) => (
   <div className="flex flex-col items-center flex-1 justify-center">
-    <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[10px] sm:text-sm mb-0.5 sm:mb-1">
+    <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[2.2vh] sm:text-sm mb-0.5 sm:mb-1">
       {label}
     </div>
-    <div className={cn("text-3xl landscape:text-2xl sm:text-5xl font-bold font-mono tracking-tighter", colorClass)}>
+    <div className={cn("text-3xl landscape:text-[7.5vh] sm:text-5xl font-bold font-mono tracking-tighter", colorClass)}>
       {gap}
     </div>
   </div>

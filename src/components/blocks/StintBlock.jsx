@@ -74,15 +74,15 @@ export const StintBlock = () => {
     <div className="flex flex-col items-center justify-center p-2 bg-pure-black h-full relative overflow-hidden">
       <button 
         onClick={resetStint}
-        className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-4 rounded-full bg-dark-gray text-white opacity-50 active:opacity-100"
+        className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-4 landscape:p-[2vh] rounded-full bg-dark-gray text-white opacity-50 active:opacity-100"
         title="Siguiente stint"
       >
-        <RefreshCw className="w-4 h-4 sm:w-8 sm:h-8" />
+        <RefreshCw className="w-4 h-4 sm:w-8 sm:h-8 landscape:w-[4vh] landscape:h-[4vh]" />
       </button>
-      <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[10px] sm:text-base mb-1 sm:mb-2 text-center">
+      <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[3vh] sm:text-base mb-1 sm:mb-2 text-center">
         Pit Window {totalStints > 1 ? `(Stint ${currentStintIndex + 1}/${totalStints})` : ''}
       </div>
-      <div className={cn("text-4xl landscape:text-3xl sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
+      <div className={cn("text-4xl landscape:text-[14vh] sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
         {displayValue}
       </div>
     </div>
