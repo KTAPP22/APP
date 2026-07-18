@@ -72,7 +72,7 @@ export const StintBlock = () => {
   return (
     <div className="flex flex-col items-center justify-center p-2 bg-pure-black h-full relative overflow-hidden">
       <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[10px] sm:text-base mb-1 sm:mb-2 text-center">
-        Pit Window {totalStints > 1 ? `(Stint ${currentStintIndex + 1}/${totalStints})` : ''}
+        Stint {totalStints > 1 ? `${currentStintIndex + 1}/${totalStints}` : ''}
       </div>
       <div className={cn("text-4xl landscape:text-3xl sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
         {displayValue}
