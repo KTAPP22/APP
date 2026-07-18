@@ -26,8 +26,8 @@ export const Dashboard = ({ onShowTiming }) => {
                           apexUrl.includes('127.0.0.1');
 
   return (
-    <div className="w-full h-full relative">
-      <div className="w-full h-full grid grid-cols-2 grid-rows-2 landscape:grid-cols-4 landscape:grid-rows-1 overflow-hidden select-none">
+    <div className="w-full min-h-[100dvh] relative overflow-y-auto">
+      <div className="w-full grid grid-cols-2 grid-rows-2 landscape:grid-cols-4 landscape:grid-rows-1 select-none min-h-[100dvh] landscape:min-h-[340px]">
         {/* Session Info */}
         <SessionBlock />
         
