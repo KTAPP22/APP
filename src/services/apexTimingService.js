@@ -181,16 +181,16 @@ function updateStoreData() {
 }
 
 /**
- * Establishes connection to the secure Apex Timing WebSocket directly.
+ * Establishes connection to the Apex Timing WebSocket.
+ * Supports both:
+ *   - Real Apex: wss://www.apex-timing.com:{configPort+3}/
+ *   - Local fake: ws://localhost:{configPort+2}/
  */
-const connectWebSocket = (port) => {
-  const wssPort = port + 3; // secure port is configPort + 3
-  const wssUrl = `wss://www.apex-timing.com:${wssPort}/`;
-  
-  console.log(`[ApexService] Connecting directly to ${wssUrl}`);
+const connectWebSocket = (wsUrl) => {
+  console.log(`[ApexService] Connecting to ${wsUrl}`);
   
   try {
-    ws = new WebSocket(wssUrl);
+    ws = new WebSocket(wsUrl);
     
     ws.onopen = () => {
       console.log('[ApexService] WebSocket connected successfully!');
@@ -206,11 +206,11 @@ const connectWebSocket = (port) => {
     
     ws.onclose = () => {
       console.log('[ApexService] WebSocket closed. Reconnecting in 5s...');
-      reconnectTimer = setTimeout(() => connectWebSocket(port), 5000);
+      reconnectTimer = setTimeout(() => connectWebSocket(wsUrl), 5000);
     };
   } catch (err) {
     console.error('[ApexService] Error starting WebSocket:', err);
-    reconnectTimer = setTimeout(() => connectWebSocket(port), 5000);
+    reconnectTimer = setTimeout(() => connectWebSocket(wsUrl), 5000);
   }
 };
 
@@ -224,8 +224,41 @@ export const startApexTimingService = (apexUrl, port = 9950) => {
     drivers: [],
   };
   
-  // Connect directly from client using port
-  connectWebSocket(port);
+  let wsUrl;
+  
+  // If the URL explicitly starts with ws:// or wss://, use it directly
+  if (apexUrl.startsWith('ws://') || apexUrl.startsWith('wss://')) {
+    wsUrl = apexUrl;
+  }
+  // Otherwise, check if it's an HTTP URL and extract the hostname
+  else if (apexUrl.startsWith('http://') || apexUrl.startsWith('https://')) {
+    try {
+      const url = new URL(apexUrl);
+      const hostname = url.hostname;
+      
+      // Check if it's localhost or a local network IP (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
+      const isLocalIp = hostname === 'localhost' || 
+                        hostname === '127.0.0.1' || 
+                        hostname.startsWith('192.168.') || 
+                        hostname.startsWith('10.') || 
+                        /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname);
+                        
+      if (isLocalIp) {
+        wsUrl = `ws://${hostname}:${port + 2}/`;
+      } else {
+        wsUrl = `wss://www.apex-timing.com:${port + 3}/`;
+      }
+    } catch (e) {
+      console.error('[ApexService] Failed to parse URL:', e);
+      wsUrl = `wss://www.apex-timing.com:${port + 3}/`;
+    }
+  }
+  // Default fallback
+  else {
+    wsUrl = `wss://www.apex-timing.com:${port + 3}/`;
+  }
+  
+  connectWebSocket(wsUrl);
 };
 
 export const stopApexTimingService = () => {

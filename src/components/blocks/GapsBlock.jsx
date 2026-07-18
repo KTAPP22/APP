@@ -24,7 +24,7 @@ export const GapsBlock = () => {
   const gapBehind = useRaceStore((state) => state.gapBehind);
 
   return (
-    <div className="flex flex-col p-2 border-r border-dark-gray bg-pure-black h-full justify-around">
+    <div className="flex flex-col p-2 border-b border-dark-gray landscape:border-r md:border-r bg-pure-black h-full justify-around min-h-[25vh] landscape:min-h-0">
       <GapItem label="Dist. Líder" gap={leaderGap} colorClass="text-white" />
       <div className="w-full h-px bg-dark-gray" />
       <GapItem label="Piloto Delante" gap={gapAhead} colorClass="text-neon-red" />

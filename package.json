@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "server": "node server/index.mjs",
+    "fake-apex": "node fake-apex-server/server.mjs",
     "start": "concurrently \"npm run dev\" \"npm run server\"",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",

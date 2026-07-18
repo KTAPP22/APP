@@ -66,7 +66,7 @@ export const StintBlock = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-pure-black h-full relative">
+    <div className="flex flex-col items-center justify-center p-4 bg-pure-black h-full relative min-h-[25vh] landscape:min-h-0">
       <button 
         onClick={resetStint}
         className="absolute top-4 right-4 p-4 rounded-full bg-dark-gray text-white opacity-50 active:opacity-100"
