@@ -51,9 +51,9 @@ export const TimingScreen = ({ onBack }) => {
       </div>
 
       {/* MAIN LAYOUT: Split into timing table and track graphic */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
-        {/* LEFT COLUMN: Timing Table (70% width on desktop, full width on mobile) */}
-        <div className="w-full md:w-[70%] border-b md:border-b-0 md:border-r border-dark-gray flex-shrink-0">
+      <div className="flex-1 flex flex-col landscape:flex-row overflow-y-auto landscape:overflow-y-hidden">
+        {/* LEFT COLUMN: Timing Table (70% width on landscape, full width on portrait) */}
+        <div className="w-full landscape:w-[70%] border-b landscape:border-b-0 landscape:border-r border-dark-gray flex-shrink-0 landscape:h-full landscape:overflow-y-auto">
           <div className="w-full overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[600px] sm:min-w-0">
               <thead>
@@ -140,8 +140,8 @@ export const TimingScreen = ({ onBack }) => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Track & Circuit Info (30% width on desktop, full width on mobile) */}
-        <div className="w-full md:w-[30%] flex flex-col bg-[#050505] flex-shrink-0 min-h-[360px] md:min-h-0">
+        {/* RIGHT COLUMN: Track & Circuit Info (30% width on landscape, full width on portrait) */}
+        <div className="w-full landscape:w-[30%] flex flex-col bg-[#050505] flex-shrink-0 min-h-[360px] landscape:min-h-0">
           {/* Header of track section (red background) */}
           <div className="bg-neon-red text-pure-black font-bold uppercase text-xs sm:text-sm px-3 py-2 tracking-wider text-center font-sans">
             Pista Principal (1428m)
