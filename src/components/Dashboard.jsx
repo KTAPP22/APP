@@ -66,7 +66,7 @@ export const Dashboard = ({ onShowTiming }) => {
 
       <div className="w-full grid grid-cols-2 grid-rows-2 landscape:grid-cols-4 landscape:grid-rows-1 select-none min-h-[100dvh] landscape:min-h-[340px]">
         {/* Session Info */}
-        <SessionBlock />
+        <SessionBlock onShowTiming={onShowTiming} />
         
         {/* Lap Times */}
         <TimesBlock />
@@ -77,18 +77,6 @@ export const Dashboard = ({ onShowTiming }) => {
         {/* Stint Timer */}
         <StintBlock />
       </div>
-
-      {/* Floating TIMING Button at the bottom */}
-      {isLucasGuerrero && (
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10">
-          <button
-            onClick={onShowTiming}
-            className="bg-neon-green hover:bg-green-500 active:scale-95 text-pure-black font-bold tracking-widest text-xs py-3 px-6 rounded-full border border-green-800 shadow-[0_0_15px_rgba(57,255,20,0.5)] transition-all uppercase flex items-center gap-2 whitespace-nowrap"
-          >
-            <span>TIMING</span>
-          </button>
-        </div>
-      )}
     </div>
   );
 };
