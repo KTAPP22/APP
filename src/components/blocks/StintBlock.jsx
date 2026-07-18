@@ -66,17 +66,17 @@ export const StintBlock = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-pure-black h-full relative min-h-[25vh] landscape:min-h-0">
+    <div className="flex flex-col items-center justify-center p-2 bg-pure-black h-full relative overflow-hidden">
       <button 
         onClick={resetStint}
-        className="absolute top-4 right-4 p-4 rounded-full bg-dark-gray text-white opacity-50 active:opacity-100"
+        className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-4 rounded-full bg-dark-gray text-white opacity-50 active:opacity-100"
       >
-        <RefreshCw size={32} />
+        <RefreshCw className="w-4 h-4 sm:w-8 sm:h-8" />
       </button>
-      <div className="text-gray-400 uppercase font-sans tracking-widest text-sm sm:text-base mb-2">
+      <div className="text-gray-400 uppercase font-sans tracking-widest text-xs sm:text-base mb-1 sm:mb-2">
         Ventana de Pit
       </div>
-      <div className={cn("text-5xl sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
+      <div className={cn("text-4xl landscape:text-5xl sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
         {displayValue}
       </div>
     </div>
