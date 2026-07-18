@@ -21,17 +21,17 @@ export const Dashboard = () => {
   }, [apexUrl, apexPort]);
 
   return (
-    <div className="w-full h-full grid grid-cols-2 grid-rows-2 overflow-hidden select-none">
-      {/* Top Left: Session Info */}
+    <div className="w-full h-full grid grid-cols-2 grid-rows-2 landscape:grid-cols-4 landscape:grid-rows-1 overflow-hidden select-none">
+      {/* Session Info */}
       <SessionBlock />
       
-      {/* Top Right: Lap Times */}
+      {/* Lap Times */}
       <TimesBlock />
       
-      {/* Bottom Left: Gaps */}
+      {/* Gaps */}
       <GapsBlock />
       
-      {/* Bottom Right: Stint Timer */}
+      {/* Stint Timer */}
       <StintBlock />
     </div>
   );
