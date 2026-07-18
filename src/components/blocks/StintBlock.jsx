@@ -73,10 +73,10 @@ export const StintBlock = () => {
       >
         <RefreshCw className="w-4 h-4 sm:w-8 sm:h-8" />
       </button>
-      <div className="text-gray-400 uppercase font-sans tracking-widest text-xs sm:text-base mb-1 sm:mb-2">
+      <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[10px] sm:text-base mb-1 sm:mb-2">
         Ventana de Pit
       </div>
-      <div className={cn("text-4xl landscape:text-5xl sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
+      <div className={cn("text-4xl landscape:text-3xl sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
         {displayValue}
       </div>
     </div>
