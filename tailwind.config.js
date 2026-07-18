@@ -13,6 +13,7 @@ export default {
         'neon-green': '#39ff14',
         'neon-red': '#ff073a',
         'neon-yellow': '#eiff00', // high visibility yellow
+        'neon-purple': '#b026ff', // premium neon purple
         'pure-black': '#000000',
         'dark-gray': '#111111',
       },

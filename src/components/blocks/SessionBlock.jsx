@@ -15,7 +15,7 @@ export const SessionBlock = ({ onShowTiming }) => {
       {isLucasGuerrero && (
         <button
           onClick={onShowTiming}
-          className="mb-1 sm:mb-2 bg-neon-green hover:bg-green-500 active:scale-95 text-pure-black font-bold tracking-widest text-[9px] sm:text-xs py-1 px-4 rounded-full border border-green-800 shadow-[0_0_10px_rgba(57,255,20,0.3)] transition-all uppercase whitespace-nowrap"
+          className="mb-1 sm:mb-2 bg-neon-purple hover:bg-purple-600 active:scale-95 text-white font-bold tracking-widest text-[9px] sm:text-xs py-1 px-4 rounded-full border border-purple-800 shadow-[0_0_10px_rgba(176,38,255,0.4)] transition-all uppercase whitespace-nowrap"
         >
           TIMING
         </button>

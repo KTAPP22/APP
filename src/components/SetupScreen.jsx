@@ -92,7 +92,7 @@ export const SetupScreen = () => {
               type="text" 
               value={driverName}
               onChange={(e) => setDriverName(e.target.value)}
-              className="w-full bg-dark-gray text-white text-xl sm:text-3xl p-3 sm:p-4 rounded-xl border border-gray-700 focus:border-neon-green focus:outline-none"
+              className="w-full bg-dark-gray text-white text-xl sm:text-3xl p-3 sm:p-4 rounded-xl border border-gray-700 focus:border-neon-purple focus:outline-none"
               placeholder="Ej. Verstappen"
               required
             />
@@ -107,7 +107,7 @@ export const SetupScreen = () => {
                   type="number" 
                   value={numStints}
                   onChange={(e) => handleNumStintsChange(e.target.value)}
-                  className="w-full bg-dark-gray text-white text-xl sm:text-3xl p-3 sm:p-4 rounded-xl border border-gray-700 focus:border-neon-green focus:outline-none"
+                  className="w-full bg-dark-gray text-white text-xl sm:text-3xl p-3 sm:p-4 rounded-xl border border-gray-700 focus:border-neon-purple focus:outline-none"
                   min="1"
                   required
                 />
@@ -117,7 +117,7 @@ export const SetupScreen = () => {
                 <select 
                   value={stintType}
                   onChange={(e) => setStintType(e.target.value)}
-                  className="w-full bg-dark-gray text-white text-base sm:text-xl p-3 sm:p-4 rounded-xl border border-gray-700 focus:border-neon-green focus:outline-none appearance-none cursor-pointer"
+                  className="w-full bg-dark-gray text-white text-base sm:text-xl p-3 sm:p-4 rounded-xl border border-gray-700 focus:border-neon-purple focus:outline-none appearance-none cursor-pointer"
                 >
                   <option value="minutes">Minutos</option>
                   <option value="laps">Vueltas</option>
@@ -134,7 +134,7 @@ export const SetupScreen = () => {
                     type="number"
                     value={dur}
                     onChange={(e) => handleDurationChange(i, e.target.value)}
-                    className="w-24 bg-dark-gray text-white text-right font-mono text-lg p-2 rounded-lg border border-gray-700 focus:border-neon-green focus:outline-none"
+                    className="w-24 bg-dark-gray text-white text-right font-mono text-lg p-2 rounded-lg border border-gray-700 focus:border-neon-purple focus:outline-none"
                     min="1"
                     required
                   />
@@ -149,7 +149,7 @@ export const SetupScreen = () => {
             <select
               value={selectedCircuitIndex}
               onChange={(e) => setSelectedCircuitIndex(parseInt(e.target.value, 10))}
-              className="w-full bg-dark-gray text-white text-base sm:text-lg p-3 sm:p-4 rounded-xl border border-gray-700 focus:border-neon-green focus:outline-none cursor-pointer"
+              className="w-full bg-dark-gray text-white text-base sm:text-lg p-3 sm:p-4 rounded-xl border border-gray-700 focus:border-neon-purple focus:outline-none cursor-pointer"
             >
               {PRESETS.map((p, idx) => (
                 <option key={idx} value={idx}>{p.name}</option>
@@ -166,7 +166,7 @@ export const SetupScreen = () => {
                   type="text" 
                   value={customUrl}
                   onChange={(e) => setCustomUrl(e.target.value)}
-                  className="w-full bg-dark-gray text-white text-base p-3 rounded-xl border border-gray-700 focus:border-neon-green focus:outline-none"
+                  className="w-full bg-dark-gray text-white text-base p-3 rounded-xl border border-gray-700 focus:border-neon-purple focus:outline-none"
                   placeholder="https://live.apex-timing.com/tu-circuito/"
                   required={isCustomSelected}
                 />
@@ -178,7 +178,7 @@ export const SetupScreen = () => {
                   type="number" 
                   value={customPort}
                   onChange={(e) => setCustomPort(e.target.value)}
-                  className="w-full bg-dark-gray text-white text-base p-3 rounded-xl border border-gray-700 focus:border-neon-green focus:outline-none"
+                  className="w-full bg-dark-gray text-white text-base p-3 rounded-xl border border-gray-700 focus:border-neon-purple focus:outline-none"
                   placeholder="9950"
                   required={isCustomSelected}
                 />
@@ -188,7 +188,7 @@ export const SetupScreen = () => {
 
           <button 
             type="submit"
-            className="w-full bg-neon-green text-pure-black text-xl sm:text-3xl font-bold py-4 sm:py-6 rounded-xl mt-6 sm:mt-8 active:bg-green-600 transition-colors"
+            className="w-full bg-neon-purple text-white text-xl sm:text-3xl font-bold py-4 sm:py-6 rounded-xl mt-6 sm:mt-8 active:bg-purple-700 hover:bg-purple-600 transition-colors shadow-[0_0_15px_rgba(176,38,255,0.4)]"
           >
             COMENZAR CARRERA
           </button>
