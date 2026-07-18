@@ -146,6 +146,7 @@ function updateStoreData() {
     useRaceStore.setState({
       sessionTimeLeft: currentState.sessionTimeLeft,
       sessionLapsLeft: currentState.sessionLapsLeft,
+      drivers: [],
     });
     return;
   }
@@ -163,6 +164,7 @@ function updateStoreData() {
     const behind = currentState.drivers.find(d => d.position === myPos + 1);
     
     useRaceStore.setState({
+      drivers: currentState.drivers,
       sessionTimeLeft: currentState.sessionTimeLeft || '--:--',
       sessionLapsLeft: currentState.sessionLapsLeft,
       lastLap: me.lastLap || '--:--',
@@ -174,6 +176,7 @@ function updateStoreData() {
     });
   } else {
     useRaceStore.setState({
+      drivers: currentState.drivers,
       sessionTimeLeft: currentState.sessionTimeLeft || '--:--',
       sessionLapsLeft: currentState.sessionLapsLeft,
     });

@@ -15,6 +15,7 @@ export const useRaceStore = create((set, get) => ({
   // Real-time Race state
   sessionTimeLeft: '00:00',
   sessionLapsLeft: null,
+  drivers: [], // All drivers currently in timing session
   
   // Driver specific state
   lastLap: '--:--',

@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SetupScreen } from './components/SetupScreen'
 import { Dashboard } from './components/Dashboard'
+import { TimingScreen } from './components/TimingScreen'
 import { useRaceStore } from './store/useRaceStore'
 
 function App() {
   const isSetupComplete = useRaceStore((state) => state.isSetupComplete);
+  const [showTiming, setShowTiming] = useState(false);
 
   // Request Wake Lock to keep screen on during race
   useEffect(() => {
@@ -37,7 +39,13 @@ function App() {
 
   return (
     <div className="w-full h-full">
-      {!isSetupComplete ? <SetupScreen /> : <Dashboard />}
+      {!isSetupComplete ? (
+        <SetupScreen />
+      ) : showTiming ? (
+        <TimingScreen onBack={() => setShowTiming(false)} />
+      ) : (
+        <Dashboard onShowTiming={() => setShowTiming(true)} />
+      )}
     </div>
   )
 }
