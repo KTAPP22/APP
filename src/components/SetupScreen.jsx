@@ -81,8 +81,10 @@ export const SetupScreen = () => {
 
   return (
     <div className="w-full min-h-full flex flex-col items-center justify-start sm:justify-center bg-dark-gray p-4 sm:p-8 overflow-y-auto">
-      <div className="w-full max-w-md space-y-6 sm:space-y-8 bg-pure-black p-4 sm:p-8 rounded-2xl border border-gray-800 my-4">
-        <h1 className="text-2xl sm:text-4xl font-bold text-center text-white mb-4 sm:mb-8 tracking-tight">KTAPP</h1>
+      <div className="w-full max-w-md space-y-6 sm:space-y-8 bg-pure-black p-4 sm:p-8 rounded-2xl border border-gray-800 md:border-neon-purple/25 md:shadow-[0_0_40px_rgba(176,38,255,0.12)] my-4 transition-all duration-300">
+        <h1 className="text-2xl sm:text-4xl font-bold text-center text-white mb-4 sm:mb-8 tracking-tight font-sans">
+          KT<span className="text-neon-purple drop-shadow-[0_0_10px_rgba(176,38,255,0.5)]">APP</span>
+        </h1>
         
         <form onSubmit={handleStart} className="space-y-6">
           {/* Driver Name */}

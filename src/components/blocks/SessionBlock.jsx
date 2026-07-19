@@ -12,7 +12,7 @@ export const SessionBlock = ({ onShowTiming }) => {
   
   return (
     <div className="flex flex-col items-center justify-center p-2 border-b landscape:border-b-0 border-r border-dark-gray bg-pure-black h-full overflow-hidden">
-      {isLucasGuerrero && (
+      {isLucasGuerrero && onShowTiming && (
         <button
           onClick={onShowTiming}
           className="mb-1 sm:mb-2 bg-neon-purple hover:bg-purple-600 active:scale-95 text-white font-bold tracking-widest text-[9px] sm:text-xs py-1 px-4 rounded-full border border-purple-800 shadow-[0_0_10px_rgba(176,38,255,0.4)] transition-all uppercase whitespace-nowrap"
