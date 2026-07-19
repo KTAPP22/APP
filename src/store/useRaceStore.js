@@ -1,6 +1,20 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+function parseTimeToSeconds(timeStr) {
+  if (!timeStr || typeof timeStr !== 'string') return 0;
+  const parts = timeStr.split(':').map(p => parseInt(p, 10));
+  if (parts.some(isNaN)) return 0;
+  if (parts.length === 2) {
+    // mm:ss
+    return parts[0] * 60 + parts[1];
+  } else if (parts.length === 3) {
+    // hh:mm:ss
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  }
+  return 0;
+}
+
 export const useRaceStore = create(
   persist(
     (set, get) => ({
@@ -19,6 +33,7 @@ export const useRaceStore = create(
       sessionTimeLeft: '00:00',
       sessionLapsLeft: null,
       drivers: [], // All drivers currently in timing session
+      maxSessionTimeSeconds: 0,
       
       // Driver specific state
       lastLap: '--:--',
@@ -51,13 +66,24 @@ export const useRaceStore = create(
         stintStartLaps: get().currentDriverLaps || 0,
         wasInPit: false,
         isStintPaused: false,
-        stintElapsedAtPitIn: 0
+        stintElapsedAtPitIn: 0,
+        maxSessionTimeSeconds: 0
       }),
       
       updateRaceData: (data) => {
         // This action will be called by the apex timing service when new data arrives.
         // data should contain session info and drivers array.
         const state = get();
+        
+        // Parse time remaining and track max session time
+        const timeSeconds = parseTimeToSeconds(data.sessionTimeLeft);
+        let newMaxSessionTime = state.maxSessionTimeSeconds || 0;
+        if (timeSeconds > newMaxSessionTime + 10) {
+          // If the time left increased by more than 10 seconds, it means the session restarted!
+          newMaxSessionTime = timeSeconds;
+        } else if (timeSeconds > 0) {
+          newMaxSessionTime = Math.max(newMaxSessionTime, timeSeconds);
+        }
         
         // Process data to find target driver
         const me = data.drivers.find(d => 
@@ -100,6 +126,12 @@ export const useRaceStore = create(
             console.log(`[AutoStint] Pilot exited box. Transitioning to stint ${nextIndex + 1}/${state.totalStints}`);
           }
 
+          // Synchronization: For the first stint, if not in pit, keep in sync with the session clock
+          if (nextIndex === 0 && !isPaused && timeSeconds > 0 && newMaxSessionTime > 0) {
+            const sessionElapsedSeconds = Math.max(0, newMaxSessionTime - timeSeconds);
+            startStintTime = Date.now() - (sessionElapsedSeconds * 1000);
+          }
+
           set({
             sessionTimeLeft: data.sessionTimeLeft,
             sessionLapsLeft: data.sessionLapsLeft,
@@ -114,12 +146,14 @@ export const useRaceStore = create(
             stintElapsedAtPitIn: elapsedAtPitIn,
             currentStintIndex: nextIndex,
             stintStartTime: startStintTime,
-            stintStartLaps: startStintLaps
+            stintStartLaps: startStintLaps,
+            maxSessionTimeSeconds: newMaxSessionTime
           });
         } else {
           set({
             sessionTimeLeft: data.sessionTimeLeft,
             sessionLapsLeft: data.sessionLapsLeft,
+            maxSessionTimeSeconds: newMaxSessionTime
           });
         }
       },
@@ -154,6 +188,7 @@ export const useRaceStore = create(
         wasInPit: state.wasInPit,
         isStintPaused: state.isStintPaused,
         stintElapsedAtPitIn: state.stintElapsedAtPitIn,
+        maxSessionTimeSeconds: state.maxSessionTimeSeconds,
       }),
     }
   )
