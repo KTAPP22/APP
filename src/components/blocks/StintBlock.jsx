@@ -15,6 +15,8 @@ export const StintBlock = () => {
   const stintStartTime = useRaceStore((state) => state.stintStartTime);
   const stintStartLaps = useRaceStore((state) => state.stintStartLaps);
   const currentDriverLaps = useRaceStore((state) => state.currentDriverLaps);
+  const isStintPaused = useRaceStore((state) => state.isStintPaused);
+  const stintElapsedAtPitIn = useRaceStore((state) => state.stintElapsedAtPitIn) || 0;
   const resetStint = useRaceStore((state) => state.resetStint);
 
   const [timeLeft, setTimeLeft] = useState(0);
@@ -25,17 +27,27 @@ export const StintBlock = () => {
   useEffect(() => {
     if (!stintStartTime || stintType !== 'minutes') return;
 
-    const interval = setInterval(() => {
+    if (isStintPaused) {
+      const totalDurationMs = activeDuration * 60 * 1000;
+      const remainingMs = totalDurationMs - stintElapsedAtPitIn;
+      setTimeLeft(Math.max(0, remainingMs));
+      return; // Freeze timer
+    }
+
+    const updateTimer = () => {
       const now = Date.now();
       const elapsedMs = now - stintStartTime;
       const totalDurationMs = activeDuration * 60 * 1000;
       const remainingMs = totalDurationMs - elapsedMs;
       
       setTimeLeft(Math.max(0, remainingMs));
-    }, 1000);
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
-  }, [stintStartTime, activeDuration, stintType]);
+  }, [stintStartTime, activeDuration, stintType, isStintPaused, stintElapsedAtPitIn]);
 
   const formatTime = (ms) => {
     const totalSeconds = Math.floor(ms / 1000);
@@ -69,6 +81,11 @@ export const StintBlock = () => {
     }
   }
 
+  // Force red color if paused in boxes
+  if (isStintPaused) {
+    colorClass = 'text-neon-red';
+  }
+
   return (
     <div className="flex flex-col items-center justify-center p-2 bg-pure-black h-full relative overflow-hidden">
       <div className="text-gray-400 uppercase font-sans tracking-widest text-xs landscape:text-[10px] sm:text-base mb-1 sm:mb-2 text-center">
@@ -77,6 +94,12 @@ export const StintBlock = () => {
       <div className={cn("text-4xl landscape:text-3xl sm:text-7xl font-bold font-mono tracking-tight", colorClass)}>
         {displayValue}
       </div>
+      
+      {isStintPaused && (
+        <div className="absolute bottom-2 px-2.5 py-0.5 rounded-full bg-neon-red/15 border border-neon-red/40 text-neon-red font-mono font-bold text-[9px] sm:text-xs tracking-widest uppercase animate-pulse">
+          IN PIT
+        </div>
+      )}
     </div>
   );
 };

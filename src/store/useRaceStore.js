@@ -34,6 +34,8 @@ export const useRaceStore = create(
       stintStartTime: null, // timestamp
       stintStartLaps: 0,
       wasInPit: false, // Tracks if driver was in pit in previous tick
+      isStintPaused: false,
+      stintElapsedAtPitIn: 0,
       
       // Actions
       completeSetup: (driverName, stintDurationsArray, type, circuitUrl, port) => set({ 
@@ -47,7 +49,9 @@ export const useRaceStore = create(
         isSetupComplete: true,
         stintStartTime: Date.now(),
         stintStartLaps: get().currentDriverLaps || 0,
-        wasInPit: false
+        wasInPit: false,
+        isStintPaused: false,
+        stintElapsedAtPitIn: 0
       }),
       
       updateRaceData: (data) => {
@@ -75,12 +79,24 @@ export const useRaceStore = create(
           let nextIndex = state.currentStintIndex;
           let startStintTime = state.stintStartTime;
           let startStintLaps = state.stintStartLaps;
+          let isPaused = state.isStintPaused;
+          let elapsedAtPitIn = state.stintElapsedAtPitIn;
 
-          // Transition: was in pit, now is not -> Exited box!
+          // Transition: was not in pit, now is in pit -> Entered box! (Pit In)
+          if (!state.wasInPit && isInPitNow) {
+            isPaused = true;
+            // Calculate elapsed time from the start of the stint to now
+            elapsedAtPitIn = Math.max(0, Date.now() - (state.stintStartTime || Date.now()));
+            console.log(`[AutoStint] Pilot entered box. Pausing stint timer. Elapsed: ${elapsedAtPitIn}ms`);
+          }
+
+          // Transition: was in pit, now is not -> Exited box! (Pit Out)
           if (state.wasInPit && !isInPitNow) {
             nextIndex = (state.currentStintIndex + 1) % state.totalStints;
             startStintTime = Date.now();
             startStintLaps = me.laps || state.currentDriverLaps;
+            isPaused = false;
+            elapsedAtPitIn = 0;
             console.log(`[AutoStint] Pilot exited box. Transitioning to stint ${nextIndex + 1}/${state.totalStints}`);
           }
 
@@ -94,6 +110,8 @@ export const useRaceStore = create(
             gapAhead: ahead ? me.gapAhead : '--',
             gapBehind: behind ? me.gapBehind : '--',
             wasInPit: isInPitNow,
+            isStintPaused: isPaused,
+            stintElapsedAtPitIn: elapsedAtPitIn,
             currentStintIndex: nextIndex,
             stintStartTime: startStintTime,
             stintStartLaps: startStintLaps
@@ -113,7 +131,9 @@ export const useRaceStore = create(
         set({ 
           currentStintIndex: nextIndex,
           stintStartTime: Date.now(),
-          stintStartLaps: get().currentDriverLaps || 0
+          stintStartLaps: get().currentDriverLaps || 0,
+          isStintPaused: false,
+          stintElapsedAtPitIn: 0
         });
       }
     }),
@@ -132,6 +152,8 @@ export const useRaceStore = create(
         stintStartTime: state.stintStartTime,
         stintStartLaps: state.stintStartLaps,
         wasInPit: state.wasInPit,
+        isStintPaused: state.isStintPaused,
+        stintElapsedAtPitIn: state.stintElapsedAtPitIn,
       }),
     }
   )
