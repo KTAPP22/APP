@@ -11,7 +11,7 @@ export const SessionBlock = ({ onShowTiming }) => {
                           apexUrl.includes('127.0.0.1');
   
   return (
-    <div className="flex flex-col items-center justify-center p-2 border-b landscape:border-b-0 border-r border-white/20 md:border-0 bg-pure-black h-full overflow-hidden">
+    <div className="flex flex-col items-center justify-center p-2 border-b landscape:border-b-0 border-r border-white/35 md:border-0 bg-pure-black h-full overflow-hidden">
       {isLucasGuerrero && onShowTiming && (
         <button
           onClick={onShowTiming}
